@@ -1,7 +1,7 @@
 /********************************************************************************
 *																				*
 *	Programme qui lit, affiche et vérifie un sudoku.                          	*
-*	Version sans les fonctions exit, printf et scanf							*
+*	Version sans les fonctions //exit, printf et scanf							*
 *															                    *
 *	Auteurs: 																	*
 *																				*
@@ -27,10 +27,10 @@ Main:	adr		x20,Sudoku          //x20 contient l'adresse de base du sudoku
 		bl		VerifierSudoku		//Appelle le sous-programme de vérification
 
 		mov		x0,0				//0: tous les tampons
-		bl		fflush				//Vidange des tampons
+		//bl		fflush				//Vidange des tampons
 
 		mov		x0,0				//0: aucune erreur
-		bl		exit				//Fin du programme
+		//bl		exit				//Fin du programme
 
 
 /*******************************************************************************
@@ -54,7 +54,7 @@ lireSudoku10:
 
 		adr		x0,scfmt1		//Param1: adresse du format de lecture
 		adr		x1,tampon		//Param2: adresse du tampon de lecture
-		bl		scanf			//Lecture d'un nombre
+		//bl		scanf			//Lecture d'un nombre
 
 
 		ldr		w22,tampon		//Récupère la valeur lue
@@ -133,7 +133,7 @@ affStruct10:
 
 
 		ldr		x0,[x26]			//Param1:Adresse du séparateur courant
-		bl		printf				//Affiche le séparateur
+		//bl		printf				//Affiche le séparateur
 
 
 affStruct20:
@@ -151,10 +151,10 @@ affStruct20:
 		b.lt	affStruct10			//Sinon, recommence
 
 		ldr		x0,[x26]			//Param1: adresse du séparateur
-		bl		printf				//Affiche un dernier séparateur
+		//bl		printf				//Affiche un dernier séparateur
 
 		adr		x0,sautLigne		//Param1: adresse du saut de ligne
-		bl		printf				//Affiche un dernier saut de ligne
+		//bl		printf				//Affiche un dernier saut de ligne
 
 		RESTORE						//Ramène l'environnement de l'appelant
 		br		x30					//Retour à l'appelant
@@ -176,7 +176,7 @@ AfficherCellule:
 		ldrb	w1,[x0]				//Récupère la valeur dans la cellule courante
 									//Param2: valeur à afficher
 		adr		x0,fmtCellule		//Param1: Adresse du format d'affichage
-		bl		printf				//Affiche le contenu de la cellule
+		//bl		printf				//Affiche le contenu de la cellule
 
 		RESTORE						//Ramène l'environnement de l'appelant
 		br		x30					//Retour à l'appelant
@@ -246,7 +246,7 @@ verifSudoku20:
 		adr		x25,fmtTable		//Adresse de la table des formats...
 		ldr		x1,[x25,x27,lsl 3]	//Param2: adresse de chaîne: fmtTable + 8*type
 		add		x2,x28,1			//Param3: numéro de structure (compteur +1)
-		bl		printf				//Affiche le message d'erreur
+		//bl		printf				//Affiche le message d'erreur
 
 
 verifSudoku30:
