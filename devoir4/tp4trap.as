@@ -30,7 +30,7 @@ Main:	adr		x20,Sudoku          //x20 contient l'adresse de base du sudoku
 		//bl		fflush				//Vidange des tampons
 
 		mov		x0,0				//0: aucune erreur
-		//bl		exit				//Fin du programme
+		bl		Exit				//Fin du programme
 
 
 /*******************************************************************************
@@ -329,7 +329,6 @@ verifStruct10:
 
 Exit:
 		mov		x8, 93
-		mov		x0, 0
 		svc		0
 
 .section ".rodata"

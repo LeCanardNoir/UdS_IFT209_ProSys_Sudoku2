@@ -1,0 +1,11 @@
+file tp4trap
+
+undisplay
+#display $x23
+
+delete
+break tp4trap.as:330
+
+layout src
+
+run < ./tests/Sudoku1
