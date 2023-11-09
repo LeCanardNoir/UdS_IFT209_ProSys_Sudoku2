@@ -151,10 +151,10 @@ affStruct20:
 		b.lt	affStruct10			//Sinon, recommence
 
 		ldr		x0,[x26]			//Param1: adresse du séparateur
-		//bl		printf				//Affiche un dernier séparateur
+		bl		Printf				//Affiche un dernier séparateur
 
 		adr		x0,sautLigne		//Param1: adresse du saut de ligne
-		//bl		printf				//Affiche un dernier saut de ligne
+		bl		Printf				//Affiche un dernier saut de ligne
 
 		RESTORE						//Ramène l'environnement de l'appelant
 		br		x30					//Retour à l'appelant
