@@ -133,7 +133,7 @@ affStruct10:
 
 
 		ldr		x0,[x26]			//Param1:Adresse du séparateur courant
-		bl		Printf				//Affiche le séparateur
+		bl		Print_structure		//Affiche le séparateur
 
 
 affStruct20:
@@ -151,10 +151,10 @@ affStruct20:
 		b.lt	affStruct10			//Sinon, recommence
 
 		ldr		x0,[x26]			//Param1: adresse du séparateur
-		bl		Printf				//Affiche un dernier séparateur
+		bl		Print_structure		//Affiche un dernier séparateur
 
 		adr		x0,sautLigne		//Param1: adresse du saut de ligne
-		bl		Printf				//Affiche un dernier saut de ligne
+		bl		Print_structure		//Affiche un dernier saut de ligne
 
 		RESTORE						//Ramène l'environnement de l'appelant
 		br		x30					//Retour à l'appelant
@@ -176,7 +176,7 @@ AfficherCellule:
 		ldrb	w1,[x0]				//Récupère la valeur dans la cellule courante
 									//Param2: valeur à afficher
 		adr		x0,fmtCellule		//Param1: Adresse du format d'affichage
-		//bl		Printf				//Affiche le contenu de la cellule
+		bl		Print_number		//Affiche le contenu de la cellule
 
 		RESTORE						//Ramène l'environnement de l'appelant
 		br		x30					//Retour à l'appelant
@@ -337,7 +337,7 @@ Fflush:
 		svc		0
 		ret
 
-Printf:
+Print_structure:
 		SAVE
 		mov		x1, x0				// Adresse de la chaine de caratères
 		bl		WordCount
@@ -345,6 +345,14 @@ Printf:
 		mov		x8, 64
 		mov		x0, 1
 		svc		0
+		RESTORE
+		ret
+
+Print_number:
+		SAVE
+
+
+
 		RESTORE
 		ret
 

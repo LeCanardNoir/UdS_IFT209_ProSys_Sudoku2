@@ -5,6 +5,10 @@ undisplay
 
 delete
 break tp4trap.as:330
+break   AfficherSudoku
+break   AfficherStructure
+break   AfficherCellule
+break   VerifierSudoku
 
 layout src
 
