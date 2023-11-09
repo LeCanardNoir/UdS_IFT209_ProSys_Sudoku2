@@ -176,7 +176,7 @@ AfficherCellule:
 		ldrb	w1,[x0]				//Récupère la valeur dans la cellule courante
 									//Param2: valeur à afficher
 		adr		x0,fmtCellule		//Param1: Adresse du format d'affichage
-		//bl		printf				//Affiche le contenu de la cellule
+		//bl		Printf				//Affiche le contenu de la cellule
 
 		RESTORE						//Ramène l'environnement de l'appelant
 		br		x30					//Retour à l'appelant
