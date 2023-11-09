@@ -327,6 +327,10 @@ verifStruct10:
 		br		x30					//Retour à l'appelant
 
 
+Exit:
+		mov		x8, 93
+		mov		x0, 0
+		svc		0
 
 .section ".rodata"
 
