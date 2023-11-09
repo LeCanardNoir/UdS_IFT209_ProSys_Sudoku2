@@ -350,9 +350,11 @@ Print_structure:
 
 Print_number:
 		SAVE
-
-
-
+		mov		x19, x0				//Param1: Adresse du format d'affichage fmtCellule " %lu "
+		mov		x20, x1				//Récupère la valeur dans la cellule courante
+		ldrb	w21, [x19], #3
+		ldrb	w22, [x19]
+		
 		RESTORE
 		ret
 
