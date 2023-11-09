@@ -133,7 +133,7 @@ affStruct10:
 
 
 		ldr		x0,[x26]			//Param1:Adresse du séparateur courant
-		//bl		printf				//Affiche le séparateur
+		bl		Printf				//Affiche le séparateur
 
 
 affStruct20:
@@ -331,12 +331,22 @@ Exit:
 		mov		x8, 93
 		svc		0
 		ret
-		
+
 Fflush:
 		mov		x8, 57				// Vidange de registre
 		svc		0
 		ret
 
+Printf:
+		SAVE
+		mov		x1, x0				// Adresse de la chaine de caratères
+		bl		WordCount
+		mov		x2, x0				// nombre de caratère
+		mov		x8, 64
+		mov		x0, 1
+		svc		0
+		RESTORE
+		ret
 
 /*
 	La fonction WordCount prend en paramètre l'adresse d'un string dans x0
