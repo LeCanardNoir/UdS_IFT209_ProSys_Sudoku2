@@ -331,6 +331,31 @@ Exit:
 		mov		x8, 93
 		svc		0
 
+
+
+/*
+	La fonction WordCount prend en paramètre l'adresse d'un string dans x0
+	et retourne dans x0 le nombre de caractères dans le string
+*/
+WordCount:
+		SAVE
+		mov		x20, x0				//x20 contient l'adresse du string
+		mov		x21, #0				//x21 contient le total
+WordCount_Loop:
+		ldrb	w22, [x20], #1
+		cmp		x22, #0
+		b.eq	WordCount_LoopEnd
+		add		x21, x21, #1
+		b.al	WordCount_Loop
+
+WordCount_LoopEnd:
+
+		mov		x0, x21				//On met le total dans x0
+		RESTORE
+		ret
+
+
+
 .section ".rodata"
 
 scfmt1:     	.asciz  "%d"
