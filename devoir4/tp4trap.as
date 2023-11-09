@@ -330,7 +330,12 @@ verifStruct10:
 Exit:
 		mov		x8, 93
 		svc		0
-
+		ret
+		
+Fflush:
+		mov		x8, 57				// Vidange de registre
+		svc		0
+		ret
 
 
 /*
