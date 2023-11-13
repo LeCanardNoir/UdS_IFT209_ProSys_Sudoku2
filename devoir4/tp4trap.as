@@ -352,12 +352,15 @@ Print_structure:
 Print_format:
 		SAVE
 		adr		x9, fmtBuffer		// Adresse du buffer de la chaine de caractères
-		ldr		x10, [x0]
-		str		x10, [x9]
-		/* mov		x19, x0				//Param1: Adresse du format d'affichage fmtCellule " %lu "
-		mov		x20, x1				//Récupère la valeur dans la cellule courante
-		ldrb	w21, [x19], #3
-		ldrb	w22, [x19] */
+		mov		x10, x0				// Adresse de la chaine de caratères
+		mov		x12, #0
+Print_formatLoop:
+		ldrb	w11, [x10], #1
+		cbz		x11, Print_formatLoopEnd
+		str		x11, [x9, x12]
+		add		x12, x12, #1
+		b.al	Print_formatLoop
+Print_formatLoopEnd:
 		mov		x0, x9
 		RESTORE
 		ret
