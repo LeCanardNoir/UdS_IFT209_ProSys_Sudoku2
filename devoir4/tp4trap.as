@@ -357,6 +357,18 @@ Print_format:
 Print_formatLoop:
 		ldrb	w11, [x10], #1
 		cbz		x11, Print_formatLoopEnd
+
+		cmp		x11, 0x25
+		b.eq	Print_formatLoop_0001
+		b.ne	Print_formatLoop_1000
+
+Print_formatLoop_0001:
+		ldrb	w13, [x10], #1
+		ldrb	w14, [x10], #1
+		mov		w11, 0x39
+		b.al	Print_formatLoop_1000
+
+Print_formatLoop_1000:
 		str		x11, [x9, x12]
 		add		x12, x12, #1
 		b.al	Print_formatLoop
