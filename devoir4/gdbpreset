@@ -1,14 +1,16 @@
 file tp4trap
 
 undisplay
-#display $x23
+display $x0
+display $x1
 
 delete
-break tp4trap.as:330
-break   AfficherSudoku
-break   AfficherStructure
-break   AfficherCellule
-break   VerifierSudoku
+break tp4trap.as:178
+#break   AfficherSudoku
+#break   AfficherStructure
+#break   AfficherCellule
+#break   VerifierSudoku
+break   Print_number
 
 layout src
 

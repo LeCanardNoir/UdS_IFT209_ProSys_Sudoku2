@@ -176,7 +176,7 @@ AfficherCellule:
 		ldrb	w1,[x0]				//Récupère la valeur dans la cellule courante
 									//Param2: valeur à afficher
 		adr		x0,fmtCellule		//Param1: Adresse du format d'affichage
-		bl		Print_number		//Affiche le contenu de la cellule
+		bl		Print_structure		//Affiche le contenu de la cellule
 
 		RESTORE						//Ramène l'environnement de l'appelant
 		br		x30					//Retour à l'appelant
@@ -339,6 +339,7 @@ Fflush:
 
 Print_structure:
 		SAVE
+		bl		Print_format
 		mov		x1, x0				// Adresse de la chaine de caratères
 		bl		WordCount
 		mov		x2, x0				// nombre de caratère
@@ -348,13 +349,16 @@ Print_structure:
 		RESTORE
 		ret
 
-Print_number:
+Print_format:
 		SAVE
-		mov		x19, x0				//Param1: Adresse du format d'affichage fmtCellule " %lu "
+		adr		x9, fmtBuffer		// Adresse du buffer de la chaine de caractères
+		ldr		x10, [x0]
+		str		x10, [x9]
+		/* mov		x19, x0				//Param1: Adresse du format d'affichage fmtCellule " %lu "
 		mov		x20, x1				//Récupère la valeur dans la cellule courante
 		ldrb	w21, [x19], #3
-		ldrb	w22, [x19]
-		
+		ldrb	w22, [x19] */
+		mov		x0, x9
 		RESTORE
 		ret
 
@@ -407,3 +411,4 @@ typeTable:		.byte 9,9,9,9,9,9,9,9,9,1,1,1,1,1,1,1,1,1,3,3,21,3,3,21,3,3,21
 .align	4
 tampon:			.skip 4
 Sudoku: 		.skip 81
+fmtBuffer:		.asciz
