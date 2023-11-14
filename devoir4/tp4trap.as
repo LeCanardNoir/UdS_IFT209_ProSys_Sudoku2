@@ -374,7 +374,7 @@ Print_formatLoop_0001:					// interprétation caractère %??
 
 		cmp		x13, '1'
 		b.eq	Print_formatLoop_0004
-		
+
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
 Print_formatLoop_0002:					// interprétation caractère %d
@@ -384,8 +384,9 @@ Print_formatLoop_0003:					// interprétation caractère %s
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 		
 Print_formatLoop_0004:					// interprétation caractère %1u
+		adr		x15, SudokuFixe
 		ldrb	w14, [x10], #1			// Charger le deuxième caratère suivant le %
-		mov		w11, 0x40				// remplacer le symbole %lu par un nombre à la con (9) pour le moment
+		ldrb	w11, [x15, #1]				// remplacer le symbole %lu par un nombre à la con (9) pour le moment
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 		
 Print_formatLoop_1000:
@@ -440,6 +441,9 @@ ptable:			.dword barreHoriz, barreVert
 fmtTable:		.dword fmtLigne,fmtColonne,fmtBloc
 distable:		.byte 1,1,1,1,1,1,1,1,9,9,9,9,9,9,9,9,1,1,7,1,1,7,1,1
 typeTable:		.byte 9,9,9,9,9,9,9,9,9,1,1,1,1,1,1,1,1,1,3,3,21,3,3,21,3,3,21
+
+.align 1
+SudokuFixe:		.byte 1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9
 
 
 
