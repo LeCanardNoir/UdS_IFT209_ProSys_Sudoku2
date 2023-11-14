@@ -356,7 +356,7 @@ Print_format:
 		mov		x12, #0
 Print_formatLoop:
 		ldrb	w11, [x10], #1		// charger dans x11 la valeur à l'adresse x10 et incrémenter x10
-		cmp		x11, 0x0			// Si x11 == null sortir de la boucle  
+		cmp		x11, 0x0			// Si x11 == null sortir de la boucle
 		b.eq	Print_formatLoopEnd
 
 		cmp		x11, 0x25			// Si x11 == %, interpréter sinon continuer la boucle
@@ -382,13 +382,14 @@ Print_formatLoop_0002:					// interprétation caractère %d
 
 Print_formatLoop_0003:					// interprétation caractère %s
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
-		
+
 Print_formatLoop_0004:					// interprétation caractère %1u
 		adr		x15, SudokuFixe
 		ldrb	w14, [x10], #1			// Charger le deuxième caratère suivant le %
-		ldrb	w11, [x15, #1]				// remplacer le symbole %lu par un nombre à la con (9) pour le moment
+		ldrb	w11, [x15], #1				// remplacer le symbole %lu par un nombre à la con (9) pour le moment
+		add		x11, x11, 0x30
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
-		
+
 Print_formatLoop_1000:
 		str		x11, [x9, x12]		// Sauvegarder le caractère dans le buffer
 		add		x12, x12, #1		// Incrémenter l'itérateur du buffer
