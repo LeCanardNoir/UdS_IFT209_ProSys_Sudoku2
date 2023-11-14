@@ -16,10 +16,8 @@
 /* Début du programme */
 
 Main:	
-		//adr		x15, SudokuFixe
 		adr		x20,Sudoku          //x20 contient l'adresse de base du sudoku
 
-		adr		x15, SudokuFixe
         mov		x0,x20              //Paramètre: adresse du sudoku
         bl		LireSudoku			//Appelle le sous-programme de lecture
 
@@ -30,7 +28,7 @@ Main:
 		bl		VerifierSudoku		//Appelle le sous-programme de vérification
 
 		mov		x0,0				//0: tous les tampons
-		//bl		fflush				//Vidange des tampons
+		bl		Fflush				//Vidange des tampons
 
 		mov		x0,0				//0: aucune erreur
 		bl		Exit				//Fin du programme
@@ -302,59 +300,60 @@ verif10:
 *******************************************************************************/
 
 VerifierStructure:
-		SAVE						//Sauvegarde l'environnement de l'appelant
+		SAVE							//Sauvegarde l'environnement de l'appelant
 
-		mov		x20,x0				//Conserve l'adresse de base de la structure
-		mov		x28,x1				//Conserve l'adresse des distances dans x28
-		mov		x24,0				//Initialise les bits de vérification
-		add		x27,x28,9			//Adresse de fin du tableau de distances
-		mov		x25,1				//Bit à injecter dans les bits de vérification
+		mov		x20,x0					//Conserve l'adresse de base de la structure
+		mov		x28,x1					//Conserve l'adresse des distances dans x28
+		mov		x24,0					//Initialise les bits de vérification
+		add		x27,x28,9				//Adresse de fin du tableau de distances
+		mov		x25,1					//Bit à injecter dans les bits de vérification
 
 verifStruct10:
 
-		ldrb	w22,[x20]			//Récupère le contenu de la cellule courante
-		lsl		x26,x25,x22			//Positionne le bit correctement
-		eor		x24,x26,x24			//Allume le bit si éteint, éteint si allumé.
+		ldrb	w22,[x20]				//Récupère le contenu de la cellule courante
+		lsl		x26,x25,x22				//Positionne le bit correctement
+		eor		x24,x26,x24				//Allume le bit si éteint, éteint si allumé.
 
-		ldrb	w23,[x28],1			//Récupère la distance suivante et avance l'adresse
-		add		x20,x20,x23			//Incrémente l'adresse de cellule de la distance
+		ldrb	w23,[x28],1				//Récupère la distance suivante et avance l'adresse
+		add		x20,x20,x23				//Incrémente l'adresse de cellule de la distance
 
-		cmp		x28,x27				//Vérifie s'il reste des cellules à parcourir
-		b.lt	verifStruct10		//Si oui, boucle
+		cmp		x28,x27					//Vérifie s'il reste des cellules à parcourir
+		b.lt	verifStruct10			//Si oui, boucle
 
-		cmp		x24,0x3FE			//Compare la liste de bits avec le résultat attendu
-		csel	x0,xzr,x25, eq		//Choisit 0 si non-égal, 1 égal.
+		cmp		x24,0x3FE				//Compare la liste de bits avec le résultat attendu
+		csel	x0,xzr,x25, eq			//Choisit 0 si non-égal, 1 égal.
 
 
-		RESTORE						//Ramène l'environnement de l'appelant
-		br		x30					//Retour à l'appelant
+		RESTORE							//Ramène l'environnement de l'appelant
+		br		x30						//Retour à l'appelant
 
 
 Exit:
-		mov		x8, 93
+		mov		x8, 93					// Sortie du programme
 		svc		0
 		ret
 
 Fflush:
-		mov		x8, 57				// Vidange de registre
+		mov		x8, 57					// Vidanges des registres
 		svc		0
 		ret
 
 Scanf:
 		SAVE
-		mov		x2, 1
-		mov		x8, 63
-		mov		x0, 0
+		mov		x2, 1					// Nombre de caractère
+		mov		x8, 63					// service READ
+		mov		x0, 0					// Lecture stdin
 		svc		0
 
-		ldrb	w7, [x1]			// buffer du caractère lu
+		ldrb	w7, [x1]				// buffer du caractère lu
+		sub		x7, x7, 48				// convertir entier ASCII en simple chiffre (1,2,3,...)
 
-		mov		x2, 1
-		mov		x8, 63
-		mov		x0, 0
+		mov		x2, 1					// Nombre de caractère
+		mov		x8, 63					// service READ
+		mov		x0, 0					// Lecture stdin
 		svc		0
 
-		strb	w7, [x1]			// sauvegarde du caractère lu dans le tampon
+		strb	w7, [x1]				// sauvegarde du caractère lu dans le tampon
 
 		RESTORE
 		ret
@@ -362,26 +361,27 @@ Scanf:
 Printf:
 		SAVE
 		bl		Print_format
-		mov		x1, x0				// Adresse de la chaine de caratères
-		bl		WordCount
-		mov		x2, x0				// nombre de caratère
-		mov		x8, 64
-		mov		x0, 1
+		mov		x1, x0					// Adresse de la chaine de caratères
+		bl		WordCount				// Compter le nombre de caractère
+
+		mov		x2, x0					// nombre de caratère
+		mov		x8, 64					// service WRITE
+		mov		x0, 1					// Écriture stdout
 		svc		0
 		RESTORE
 		ret
 
 Print_format:
 		SAVE
-		adr		x9, fmtBuffer		// Adresse du buffer de la chaine de caractères
-		mov		x10, x0				// Adresse de la chaine de caratères
+		adr		x9, fmtBuffer			// Adresse du buffer de la chaine de caractères
+		mov		x10, x0					// Adresse de la chaine de caratères
 		mov		x12, #0
 Print_formatLoop:
-		ldrb	w11, [x10], #1		// charger dans x11 la valeur à l'adresse x10 et incrémenter x10
-		cmp		x11, 0x0			// Si x11 == null sortir de la boucle
+		ldrb	w11, [x10], #1			// charger dans x11 la valeur à l'adresse x10 et incrémenter x10
+		cmp		x11, 0x0				// Si x11 == null sortir de la boucle
 		b.eq	Print_formatLoopEnd
 
-		cmp		x11, 0x25			// Si x11 == %, interpréter sinon continuer la boucle
+		cmp		x11, 0x25				// Si x11 == %, interpréter sinon continuer la boucle
 		b.eq	Print_formatLoop_0001
 		b.ne	Print_formatLoop_1000
 
@@ -400,34 +400,30 @@ Print_formatLoop_0001:					// interprétation caractère %??
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
 Print_formatLoop_0002:					// interprétation caractère %d
-		ldrb	w11, [x20, x22]
-		/* mov		x14, #9
-		udiv	x11, x11, x14 */
+		add		x11, x2, 0x30			// Convertion décimal à hexadécimal
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
 Print_formatLoop_0003:					// interprétation caractère %s
-		ldrb	w14, [x1], #1
-		cmp		x14, 0x0
+		ldrb	w14, [x1], #1			// Récupérer 1er caractère de la chaine de caractères
+		cmp		x14, 0x0				// si x14 == null
 		b.eq	Print_formatLoop		// Sauvegarde caractère x14 dans le buffer
 
-		str		x14, [x9, x12]		// Sauvegarder le caractère dans le buffer
-		add		x12, x12, #1		// Incrémenter l'itérateur du buffer
+		str		x14, [x9, x12]			// Sauvegarder le caractère dans le buffer
+		add		x12, x12, #1			// Incrémenter l'itérateur du buffer
 		b.al	Print_formatLoop_0003
 
 Print_formatLoop_0004:					// interprétation caractère %1u
 		ldrb	w14, [x10], #1			// Charger le deuxième caratère suivant le %
-		//ldrb	w11, [x20], #1			// remplacer le symbole %lu par un nombre à la con (9) pour le moment
-		//add		x11, x11, 0x30
-		mov		x11, x1
+		add		x11, x1, 0x30			// Convertir décimal à hexadécimal
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
 Print_formatLoop_1000:
-		str		x11, [x9, x12]		// Sauvegarder le caractère dans le buffer
-		add		x12, x12, #1		// Incrémenter l'itérateur du buffer
+		str		x11, [x9, x12]			// Sauvegarder le caractère dans le buffer
+		add		x12, x12, #1			// Incrémenter l'itérateur du buffer
 		b.al	Print_formatLoop
 
 Print_formatLoopEnd:
-		mov		x0, x9				// Sauvegarder l'adresse du buffer dans le x0
+		mov		x0, x9					// Sauvegarder l'adresse du buffer dans le x0
 		RESTORE
 		ret
 
@@ -437,18 +433,18 @@ Print_formatLoopEnd:
 */
 WordCount:
 		SAVE
-		mov		x10, x0				//x10 contient l'adresse du string
-		mov		x21, #0				//x21 contient le total
+		mov		x10, x0					// x10 contient l'adresse du string
+		mov		x21, #0					// x21 contient le total
 WordCount_Loop:
-		ldrb	w22, [x10], #1
-		cmp		x22, 0x0
+		ldrb	w22, [x10], #1			// charger le caractère courant
+		cmp		x22, 0x0				// si x22 == null
 		b.eq	WordCount_LoopEnd
-		add		x21, x21, #1
+		add		x21, x21, #1			// incrémenter le nombre de caractères
 		b.al	WordCount_Loop
 
 WordCount_LoopEnd:
 
-		mov		x0, x21				//On met le total dans x0
+		mov		x0, x21					//On met le nombre total de caractères dans x0
 		RESTORE
 		ret
 
@@ -474,10 +470,7 @@ fmtTable:		.dword fmtLigne,fmtColonne,fmtBloc
 distable:		.byte 1,1,1,1,1,1,1,1,9,9,9,9,9,9,9,9,1,1,7,1,1,7,1,1
 typeTable:		.byte 9,9,9,9,9,9,9,9,9,1,1,1,1,1,1,1,1,1,3,3,21,3,3,21,3,3,21
 
-.align 1
-SudokuFixe:		.byte 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','a','A','D'
-
-
+SudokuFixe:		.byte 1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9
 
 .section ".bss"
 .align	4
