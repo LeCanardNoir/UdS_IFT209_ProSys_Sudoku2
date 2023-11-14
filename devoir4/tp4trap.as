@@ -249,7 +249,7 @@ verifSudoku20:
 		adr		x25,fmtTable		//Adresse de la table des formats...
 		ldr		x1,[x25,x27,lsl 3]	//Param2: adresse de chaîne: fmtTable + 8*type
 		add		x2,x28,1			//Param3: numéro de structure (compteur +1)
-		//bl		printf				//Affiche le message d'erreur
+		bl		Printf				//Affiche le message d'erreur
 
 
 verifSudoku30:
@@ -400,9 +400,11 @@ Print_formatLoop_0001:					// interprétation caractère %??
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
 Print_formatLoop_0002:					// interprétation caractère %d
+		ldrb	w11, [x20,x22]
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
 Print_formatLoop_0003:					// interprétation caractère %s
+		mov		x11, x1
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
 Print_formatLoop_0004:					// interprétation caractère %1u
