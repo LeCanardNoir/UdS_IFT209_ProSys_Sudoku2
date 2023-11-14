@@ -15,7 +15,9 @@
 
 /* Début du programme */
 
-Main:	adr		x20,Sudoku          //x20 contient l'adresse de base du sudoku
+Main:	
+		adr		x15, SudokuFixe
+		adr		x20,Sudoku          //x20 contient l'adresse de base du sudoku
 
 		adr		x15, SudokuFixe
         mov		x0,x20              //Paramètre: adresse du sudoku
@@ -338,6 +340,14 @@ Fflush:
 		svc		0
 		ret
 
+Scanf:
+		SAVE
+		mov		x8, 64
+		mov		x0, 1
+		svc		0
+		RESTORE
+		ret
+
 Printf:
 		SAVE
 		bl		Print_format
@@ -386,7 +396,7 @@ Print_formatLoop_0003:					// interprétation caractère %s
 
 Print_formatLoop_0004:					// interprétation caractère %1u
 		ldrb	w14, [x10], #1			// Charger le deuxième caratère suivant le %
-		ldrb	w11, [x15], #1				// remplacer le symbole %lu par un nombre à la con (9) pour le moment
+		ldrb	w11, [x15], #1			// remplacer le symbole %lu par un nombre à la con (9) pour le moment
 		add		x11, x11, 0x30
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
