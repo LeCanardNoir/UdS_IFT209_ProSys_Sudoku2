@@ -356,23 +356,26 @@ Print_format:
 		mov		x12, #0
 Print_formatLoop:
 		ldrb	w11, [x10], #1		// charger dans x11 la valeur à l'adresse x10 et incrémenter x10
-		cmp		x11, 0x0
+		cmp		x11, 0x0			// Si x11 == null sortir de la boucle  
 		b.eq	Print_formatLoopEnd
 
-		cmp		x11, 0x25			// Si la valeur dans x11 est égale à %, aller à la portion d'interprétation sinon continuer la boucle
+		cmp		x11, 0x25			// Si x11 == %, interpréter sinon continuer la boucle
 		b.eq	Print_formatLoop_0001
 		b.ne	Print_formatLoop_1000
 
-Print_formatLoop_0001:
-		ldrb	w13, [x10], #1		// Charger le caratère suivant le %
-		ldrb	w14, [x10], #1		// Charger le deuxième caratère suivant le %
-		mov		w11, 0x58			// remplacer le symbole %lu par un nombre à la con (9) pour le moment
-		b.al	Print_formatLoop_1000
+Print_formatLoop_0001:					// interprétation caractère %??
+		ldrb	w13, [x10], #1			// Charger le caratère suivant le %
+		ldrb	w14, [x10], #1			// Charger le deuxième caratère suivant le %
+		mov		w11, 0x40				// remplacer le symbole %lu par un nombre à la con (9) pour le moment
+		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
+
+Print_formatLoop_0002:
 
 Print_formatLoop_1000:
 		str		x11, [x9, x12]		// Sauvegarder le caractère dans le buffer
 		add		x12, x12, #1		// Incrémenter l'itérateur du buffer
 		b.al	Print_formatLoop
+
 Print_formatLoopEnd:
 		mov		x0, x9				// Sauvegarder l'adresse du buffer dans le x0
 		RESTORE
