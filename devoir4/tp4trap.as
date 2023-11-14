@@ -16,7 +16,7 @@
 /* Début du programme */
 
 Main:	
-		adr		x15, SudokuFixe
+		//adr		x15, SudokuFixe
 		adr		x20,Sudoku          //x20 contient l'adresse de base du sudoku
 
 		adr		x15, SudokuFixe
@@ -179,7 +179,7 @@ AfficherCellule:
 		ldrb	w1,[x0]				//Récupère la valeur dans la cellule courante
 									//Param2: valeur à afficher
 		adr		x0,fmtCellule		//Param1: Adresse du format d'affichage
-		bl		Printf		//Affiche le contenu de la cellule
+		bl		Printf				//Affiche le contenu de la cellule
 
 		RESTORE						//Ramène l'environnement de l'appelant
 		br		x30					//Retour à l'appelant
@@ -347,14 +347,14 @@ Scanf:
 		mov		x0, 0
 		svc		0
 
-		ldrb	w7, [x1]
+		ldrb	w7, [x1]			// buffer du caractère lu
 
 		mov		x2, 1
 		mov		x8, 63
 		mov		x0, 0
 		svc		0
 
-		strb	w7, [x1]
+		strb	w7, [x1]			// sauvegarde du caractère lu dans le tampon
 
 		RESTORE
 		ret
