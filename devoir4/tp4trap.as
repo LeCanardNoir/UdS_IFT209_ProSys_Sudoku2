@@ -365,8 +365,8 @@ Print_formatLoop:
 
 Print_formatLoop_0001:					// interprétation caractère %??
 		ldrb	w13, [x10], #1			// Charger le caratère suivant le %
-		ldrb	w14, [x10], #1			// Charger le deuxième caratère suivant le %
-		mov		w11, 0x40				// remplacer le symbole %lu par un nombre à la con (9) pour le moment
+		cmp		x13, '1'
+		b.eq	Print_formatLoop_0004
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
 Print_formatLoop_0002:					// interprétation caractère %d
@@ -376,6 +376,8 @@ Print_formatLoop_0003:					// interprétation caractère %s
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 		
 Print_formatLoop_0004:					// interprétation caractère %1u
+		ldrb	w14, [x10], #1			// Charger le deuxième caratère suivant le %
+		mov		w11, 0x40				// remplacer le symbole %lu par un nombre à la con (9) pour le moment
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 		
 Print_formatLoop_1000:
