@@ -1,0 +1,21 @@
+file tp4trap
+
+undisplay
+display $x2
+display $x7
+display $x11
+display tampon
+display Sudoku
+
+delete
+#break tp4trap.as:252
+#break   AfficherSudoku
+#break   AfficherStructure
+#break   AfficherCellule
+#break   VerifierSudoku
+break   Print_formatLoop_0002
+#break   Scanf
+
+layout src
+
+run < ./tests/Sudoku1
