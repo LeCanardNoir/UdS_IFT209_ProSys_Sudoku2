@@ -133,7 +133,7 @@ affStruct10:
 
 
 		ldr		x0,[x26]			//Param1:Adresse du séparateur courant
-		bl		Print_structure		//Affiche le séparateur
+		bl		Printf		//Affiche le séparateur
 
 
 affStruct20:
@@ -151,10 +151,10 @@ affStruct20:
 		b.lt	affStruct10			//Sinon, recommence
 
 		ldr		x0,[x26]			//Param1: adresse du séparateur
-		bl		Print_structure		//Affiche un dernier séparateur
+		bl		Printf		//Affiche un dernier séparateur
 
 		adr		x0,sautLigne		//Param1: adresse du saut de ligne
-		bl		Print_structure		//Affiche un dernier saut de ligne
+		bl		Printf		//Affiche un dernier saut de ligne
 
 		RESTORE						//Ramène l'environnement de l'appelant
 		br		x30					//Retour à l'appelant
@@ -176,7 +176,7 @@ AfficherCellule:
 		ldrb	w1,[x0]				//Récupère la valeur dans la cellule courante
 									//Param2: valeur à afficher
 		adr		x0,fmtCellule		//Param1: Adresse du format d'affichage
-		bl		Print_structure		//Affiche le contenu de la cellule
+		bl		Printf		//Affiche le contenu de la cellule
 
 		RESTORE						//Ramène l'environnement de l'appelant
 		br		x30					//Retour à l'appelant
@@ -337,7 +337,7 @@ Fflush:
 		svc		0
 		ret
 
-Print_structure:
+Printf:
 		SAVE
 		bl		Print_format
 		mov		x1, x0				// Adresse de la chaine de caratères
@@ -356,7 +356,8 @@ Print_format:
 		mov		x12, #0
 Print_formatLoop:
 		ldrb	w11, [x10], #1		// charger dans x11 la valeur à l'adresse x10 et incrémenter x10
-		cbz		x11, Print_formatLoopEnd
+		cmp		x11, 0x0
+		b.eq	Print_formatLoopEnd
 
 		cmp		x11, 0x25			// Si la valeur dans x11 est égale à %, aller à la portion d'interprétation sinon continuer la boucle
 		b.eq	Print_formatLoop_0001
@@ -365,7 +366,7 @@ Print_formatLoop:
 Print_formatLoop_0001:
 		ldrb	w13, [x10], #1		// Charger le caratère suivant le %
 		ldrb	w14, [x10], #1		// Charger le deuxième caratère suivant le %
-		mov		w11, 0x39			// remplacer le symbole %lu par un nombre à la con (9) pour le moment
+		mov		w11, 0x58			// remplacer le symbole %lu par un nombre à la con (9) pour le moment
 		b.al	Print_formatLoop_1000
 
 Print_formatLoop_1000:
@@ -387,7 +388,7 @@ WordCount:
 		mov		x21, #0				//x21 contient le total
 WordCount_Loop:
 		ldrb	w22, [x20], #1
-		cmp		x22, #0
+		cmp		x22, 0x0
 		b.eq	WordCount_LoopEnd
 		add		x21, x21, #1
 		b.al	WordCount_Loop
