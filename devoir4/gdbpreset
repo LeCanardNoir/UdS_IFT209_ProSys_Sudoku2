@@ -1,16 +1,19 @@
 file tp4trap
 
 undisplay
-display $x0
-display $x1
+display $x7
+display $x11
+display $x22
+display tampon
+display Sudoku
 
 delete
-break tp4trap.as:178
+break tp4trap.as:58
 #break   AfficherSudoku
 #break   AfficherStructure
 #break   AfficherCellule
 #break   VerifierSudoku
-break   Print_number
+break   Print_format
 
 layout src
 

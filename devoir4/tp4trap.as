@@ -346,11 +346,16 @@ Scanf:
 		mov		x8, 63
 		mov		x0, 0
 		svc		0
-		
+
+		ldrb	w7, [x1]
+
 		mov		x2, 1
 		mov		x8, 63
 		mov		x0, 0
 		svc		0
+
+		strb	w7, [x1]
+
 		RESTORE
 		ret
 
@@ -402,8 +407,9 @@ Print_formatLoop_0003:					// interprétation caractère %s
 
 Print_formatLoop_0004:					// interprétation caractère %1u
 		ldrb	w14, [x10], #1			// Charger le deuxième caratère suivant le %
-		ldrb	w11, [x20], #1			// remplacer le symbole %lu par un nombre à la con (9) pour le moment
-		add		x11, x11, 0x30
+		//ldrb	w11, [x20], #1			// remplacer le symbole %lu par un nombre à la con (9) pour le moment
+		//add		x11, x11, 0x30
+		mov		x11, x1
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
 Print_formatLoop_1000:
@@ -422,10 +428,10 @@ Print_formatLoopEnd:
 */
 WordCount:
 		SAVE
-		mov		x20, x0				//x20 contient l'adresse du string
+		mov		x10, x0				//x10 contient l'adresse du string
 		mov		x21, #0				//x21 contient le total
 WordCount_Loop:
-		ldrb	w22, [x20], #1
+		ldrb	w22, [x10], #1
 		cmp		x22, 0x0
 		b.eq	WordCount_LoopEnd
 		add		x21, x21, #1
@@ -460,7 +466,7 @@ distable:		.byte 1,1,1,1,1,1,1,1,9,9,9,9,9,9,9,9,1,1,7,1,1,7,1,1
 typeTable:		.byte 9,9,9,9,9,9,9,9,9,1,1,1,1,1,1,1,1,1,3,3,21,3,3,21,3,3,21
 
 .align 1
-SudokuFixe:		.byte 1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9
+SudokuFixe:		.byte 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','a','A','D'
 
 
 
