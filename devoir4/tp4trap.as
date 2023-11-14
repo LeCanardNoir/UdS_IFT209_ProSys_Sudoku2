@@ -57,7 +57,7 @@ lireSudoku10:
 
 		adr		x0,scfmt1		//Param1: adresse du format de lecture
 		adr		x1,tampon		//Param2: adresse du tampon de lecture
-		//bl		scanf			//Lecture d'un nombre
+		bl		Scanf			//Lecture d'un nombre
 
 
 		ldr		w22,tampon		//Récupère la valeur lue
@@ -342,8 +342,14 @@ Fflush:
 
 Scanf:
 		SAVE
-		mov		x8, 64
-		mov		x0, 1
+		mov		x2, 1
+		mov		x8, 63
+		mov		x0, 0
+		svc		0
+		
+		mov		x2, 1
+		mov		x8, 63
+		mov		x0, 0
 		svc		0
 		RESTORE
 		ret
@@ -396,7 +402,7 @@ Print_formatLoop_0003:					// interprétation caractère %s
 
 Print_formatLoop_0004:					// interprétation caractère %1u
 		ldrb	w14, [x10], #1			// Charger le deuxième caratère suivant le %
-		ldrb	w11, [x15], #1			// remplacer le symbole %lu par un nombre à la con (9) pour le moment
+		ldrb	w11, [x20], #1			// remplacer le symbole %lu par un nombre à la con (9) pour le moment
 		add		x11, x11, 0x30
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
