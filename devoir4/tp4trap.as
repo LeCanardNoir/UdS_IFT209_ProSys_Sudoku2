@@ -17,6 +17,7 @@
 
 Main:	adr		x20,Sudoku          //x20 contient l'adresse de base du sudoku
 
+		adr		x15, SudokuFixe
         mov		x0,x20              //Paramètre: adresse du sudoku
         bl		LireSudoku			//Appelle le sous-programme de lecture
 
@@ -384,7 +385,6 @@ Print_formatLoop_0003:					// interprétation caractère %s
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
 Print_formatLoop_0004:					// interprétation caractère %1u
-		adr		x15, SudokuFixe
 		ldrb	w14, [x10], #1			// Charger le deuxième caratère suivant le %
 		ldrb	w11, [x15], #1				// remplacer le symbole %lu par un nombre à la con (9) pour le moment
 		add		x11, x11, 0x30
