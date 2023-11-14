@@ -369,8 +369,15 @@ Print_formatLoop_0001:					// interprétation caractère %??
 		mov		w11, 0x40				// remplacer le symbole %lu par un nombre à la con (9) pour le moment
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
-Print_formatLoop_0002:
+Print_formatLoop_0002:					// interprétation caractère %d
+		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
+Print_formatLoop_0003:					// interprétation caractère %s
+		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
+		
+Print_formatLoop_0004:					// interprétation caractère %1u
+		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
+		
 Print_formatLoop_1000:
 		str		x11, [x9, x12]		// Sauvegarder le caractère dans le buffer
 		add		x12, x12, #1		// Incrémenter l'itérateur du buffer
