@@ -136,7 +136,7 @@ affStruct10:
 
 
 		ldr		x0,[x26]			//Param1:Adresse du séparateur courant
-		bl		Printf		//Affiche le séparateur
+		bl		Printf				//Affiche le séparateur
 
 
 affStruct20:
@@ -154,10 +154,10 @@ affStruct20:
 		b.lt	affStruct10			//Sinon, recommence
 
 		ldr		x0,[x26]			//Param1: adresse du séparateur
-		bl		Printf		//Affiche un dernier séparateur
+		bl		Printf				//Affiche un dernier séparateur
 
 		adr		x0,sautLigne		//Param1: adresse du saut de ligne
-		bl		Printf		//Affiche un dernier saut de ligne
+		bl		Printf				//Affiche un dernier saut de ligne
 
 		RESTORE						//Ramène l'environnement de l'appelant
 		br		x30					//Retour à l'appelant
@@ -248,7 +248,7 @@ verifSudoku20:
 		adr		x0,fmtErreur		//Param1: format d'impression
 		adr		x25,fmtTable		//Adresse de la table des formats...
 		ldr		x1,[x25,x27,lsl 3]	//Param2: adresse de chaîne: fmtTable + 8*type
-		add		x2,x28,1			//Param3: numéro de structure (compteur +1)
+		add		x2,x28,1			//Param3: nuémro de structure (compteur +1)
 		bl		Printf				//Affiche le message d'erreur
 
 
@@ -400,12 +400,19 @@ Print_formatLoop_0001:					// interprétation caractère %??
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
 Print_formatLoop_0002:					// interprétation caractère %d
-		ldrb	w11, [x20,x22]
+		ldrb	w11, [x20, x22]
+		/* mov		x14, #9
+		udiv	x11, x11, x14 */
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
 Print_formatLoop_0003:					// interprétation caractère %s
-		mov		x11, x1
-		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
+		ldrb	w14, [x1], #1
+		cmp		x14, 0x0
+		b.eq	Print_formatLoop		// Sauvegarde caractère x14 dans le buffer
+
+		str		x14, [x9, x12]		// Sauvegarder le caractère dans le buffer
+		add		x12, x12, #1		// Incrémenter l'itérateur du buffer
+		b.al	Print_formatLoop_0003
 
 Print_formatLoop_0004:					// interprétation caractère %1u
 		ldrb	w14, [x10], #1			// Charger le deuxième caratère suivant le %
