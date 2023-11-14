@@ -365,8 +365,16 @@ Print_formatLoop:
 
 Print_formatLoop_0001:					// interprétation caractère %??
 		ldrb	w13, [x10], #1			// Charger le caratère suivant le %
+
+		cmp		x13, 'd'
+		b.eq	Print_formatLoop_0002
+
+		cmp		x13, 's'
+		b.eq	Print_formatLoop_0003
+
 		cmp		x13, '1'
 		b.eq	Print_formatLoop_0004
+		
 		b.al	Print_formatLoop_1000	// Sauvegarde caractère x11 dans le buffer
 
 Print_formatLoop_0002:					// interprétation caractère %d
